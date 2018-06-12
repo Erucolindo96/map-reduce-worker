@@ -2,13 +2,12 @@ from src.MapReduce.Worker.States import MainStates
 from src.MapReduce.Worker.Worker import Worker, EndOfTestException
 
 TESTING = False
-TESTING_STATE = "WAIT_FOR_MASTER"
+TESTING_STATE = "PREPARE_AND_RUN_MAP"
 
 
 def main():
 
     worker = Worker()
-    worker.readConfiguration()
     try:
         if TESTING:
             print("Testing")
@@ -17,6 +16,8 @@ def main():
             worker.runWorker(testing=TESTING)
     except EndOfTestException as e:
         print(str(e))
+    except MainStates.EndOfWork:
+        return 0
 
 
 main()
