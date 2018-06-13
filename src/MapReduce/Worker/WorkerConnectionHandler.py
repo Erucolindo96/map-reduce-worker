@@ -55,6 +55,7 @@ class WorkerConnectionHandler(Iface):
         return str(self.root_fs) + self.getFileCollectorPath() #bo tam skladujemy pary do pliku
 
     def workerList(self):
+        print(self.worker_list)
         return self.worker_list
 
     def getFileCollectorPath(self):
@@ -70,7 +71,10 @@ class WorkerConnectionHandler(Iface):
         for worker in worker_list:
             ip = worker.ip
             port = worker.port
-            parsed_worker_list.append(ClientListeningInfo(ip=socket.ntohl(ip+ 1 + 0xFFFFFFFF) , port= port ) )
+            if ip > 0:
+                parsed_worker_list.append(ClientListeningInfo(ip=socket.ntohl(ip), port=port))
+            else:
+                parsed_worker_list.append(ClientListeningInfo(ip=socket.ntohl(ip + 1 + 0xFFFFFFFF) , port= port ) )
             #TODO - brzydka konwersja z int na uint
         return parsed_worker_list
 
@@ -191,9 +195,13 @@ class PairCollector():
 
         pair_str = Utilities.PairParser.parseKeyValueToString(pair.key, pair.value)
         try:
-            for i in range(int(pair.quantity)):
+            count = pair.quantity
+            if count is None:
+                count = 1 #TODO zlokalizowac czemu czasami jest None
+            for i in range(int(count)):
                 self.pair_file.write(pair_str + '\n')
         except Exception as e:
+            print("Zachowuje pare dostarczona przez innego workera")
             print(e)
 
     def closeFile(self):

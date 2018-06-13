@@ -86,7 +86,9 @@ class MapPairManager(PairManager):
     def sendKeyValueToWorker(self, worker_num, key, value, quantity):
         addresser = self.workers_connections_list[worker_num]
         try:
-            addresser.RegisterMapPair( [ttypes.KeyValueEntity(key, value, quantity)] )
+            pair = ttypes.KeyValueEntity(key, value, quantity)
+            print(pair)
+            addresser.RegisterMapPair( [ pair ] )
         except InvalidState as e:
             self.worker_ref.fatalError("Cannot send key-value entity to another worker")
             raise e
@@ -94,9 +96,14 @@ class MapPairManager(PairManager):
     def createConnectionsToWorkers(self):
 
         for worker_addr in self.workers_addr_list:
-            connection = WorkerServiceClient()
-            connection.openConnection(str(ipaddress.ip_address(worker_addr.ip)), int(worker_addr.port))
-            self.workers_connections_list.append(connection)
+            try:
+                connection = WorkerServiceClient()
+                connection.openConnection(str(ipaddress.ip_address(worker_addr.ip)), int(worker_addr.port))
+                self.workers_connections_list.append(connection)
+            except Exception as e:
+                self.worker_ref.fatalError("Can't connect to other worker!")
+                self.worker_ref.fatalError("Ip is:" + str(ipaddress.IPv4Address(ipaddress.ip_address(worker_addr.ip))) +
+                                           "Port is " + str(ipaddress.IPv4Address(worker_addr.port)))
 
     def closeConnectionsAndFile(self):
         for worker_con in self.workers_connections_list:

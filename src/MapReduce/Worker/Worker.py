@@ -38,7 +38,7 @@ Zamiast tego posredniczy w wywolywaniu przez stany metod klas, ktore posiada
 class Worker:
     def __init__(self):
         self.state = WaitingForMasterState(self)
-        self.config_reader = ConfigReader.ConfigReader() #TODO zainicjalizowac
+        self.config_reader = ConfigReader.ConfigReader()
         self.worker_con_handler = WorkerConnectionHandler.WorkerConnectionHandler(self.config_reader.getRootDirectory())
         self.worker_server = WorkerServer(my_ip=self.config_reader.getWorkerIp(), my_port=self.config_reader.getWorkerServerPort()
                                           , handler=self.worker_con_handler)

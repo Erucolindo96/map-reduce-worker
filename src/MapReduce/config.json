@@ -12,7 +12,7 @@
 	},
 
 	"FilesystemConfig":{
-	  "FilesystemRoot":"src/MapReduce/map_reduce_sshfs/" 
+	  "FilesystemRoot":"map_reduce_sshfs/" 
 	 
 	}
 

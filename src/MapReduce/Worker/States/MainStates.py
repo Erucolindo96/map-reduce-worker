@@ -8,6 +8,7 @@ class NotImplemented(Exception):
 class EndOfWork(ChangingStateException):
     pass
 
+
 class WaitingForMasterState(InterruptableState):
     def __init__(self, worker_ref):
         InterruptableState.__init__(self, worker_ref)

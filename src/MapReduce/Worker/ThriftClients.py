@@ -72,7 +72,6 @@ class WorkerServiceClient(ClientThriftConnection):
         return self.thrift_client.Ping()
 
     def RegisterMapPair(self, pairs):
-
         self.thrift_client.RegisterMapPair(pairs)
 
 

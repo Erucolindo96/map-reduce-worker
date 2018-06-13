@@ -29,6 +29,7 @@ class ExternalProcess():
                                    stdin=self.input_f, stdout=self.output_path,  universal_newlines=True)
         except Exception as e:
             print(e)
+            print("po procesie map")
 
         self.closeFiles()
 
